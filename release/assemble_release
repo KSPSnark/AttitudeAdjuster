@@ -1,0 +1,11 @@
+echo Creating release file structure
+mkdir -p GameData/AttitudeAdjuster
+cp ../files/ModuleManager.*.dll GameData
+cp ../files/ModuleManagerLicense.md GameData
+cp ../files/changelog.txt GameData/AttitudeAdjuster
+cp ../files/*.cfg GameData/AttitudeAdjuster
+cp ../files/config/*.cfg GameData/AttitudeAdjuster
+cp ../src/bin/Release/AttitudeAdjuster.dll GameData/AttitudeAdjuster
+cp ../LICENSE GameData/AttitudeAdjuster
+cp ../README.md GameData/AttitudeAdjuster
+echo Done.
