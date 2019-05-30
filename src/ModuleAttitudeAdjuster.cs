@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace AttitudeAdjuster
 {
@@ -14,6 +13,7 @@ namespace AttitudeAdjuster
         private const float DEFAULT_MIN_PITCH = 0;
         private const float DEFAULT_MAX_PITCH = 90;
         private const float DEFAULT_PITCH_INCREMENT = 1;
+        private const float DEFAULT_AXIS_SPEED = 10;
 
         /// <summary>
         /// The minimum allowed value of the pitch field.
@@ -34,14 +34,34 @@ namespace AttitudeAdjuster
         public float pitchIncrement = DEFAULT_PITCH_INCREMENT;
 
         /// <summary>
+        /// The speed with which the axis changes when bound to an axis group.
+        /// </summary>
+        [KSPField]
+        public float axisSpeed = DEFAULT_AXIS_SPEED;
+
+        /// <summary>
         /// Specifies the pitch angle, in degrees, that's applied to the control point.
         /// 0 = no adjustment, 90 = pitch 90 degrees straight up, 180 = full reversal.
         /// </summary>
-        [KSPField(guiName = "#AttitudeAdjuster_pitchAngle", guiActive = false, guiActiveEditor = false, isPersistant = true),
-         UI_FloatRange(scene = UI_Scene.All, affectSymCounterparts = UI_Scene.All, controlEnabled = true,
-            minValue = DEFAULT_MIN_PITCH, maxValue = DEFAULT_MAX_PITCH, stepIncrement = DEFAULT_PITCH_INCREMENT)]
+        [KSPAxisField(
+            guiName = "#AttitudeAdjuster_pitchAngle",
+            guiActive = false,
+            guiActiveEditor = false,
+            isPersistant = true,
+            guiFormat = "F1",
+            axisMode = KSPAxisMode.Incremental,
+            minValue = DEFAULT_MIN_PITCH,
+            maxValue = DEFAULT_MAX_PITCH,
+            incrementalSpeed = DEFAULT_AXIS_SPEED),
+         UI_FloatRange(
+            scene = UI_Scene.All,
+            affectSymCounterparts = UI_Scene.All,
+            controlEnabled = true,
+            minValue = DEFAULT_MIN_PITCH,
+            maxValue = DEFAULT_MAX_PITCH,
+            stepIncrement = DEFAULT_PITCH_INCREMENT)]
         public float pitch;
-        private BaseField PitchField { get { return Fields["pitch"]; } }
+        private BaseAxisField PitchField { get { return (BaseAxisField)Fields["pitch"]; } }
 
         public override void OnStart(StartState state)
         {
@@ -50,9 +70,10 @@ namespace AttitudeAdjuster
             // Set up the control range for the module's UI.
             UI_FloatRange uiRange1 = (UI_FloatRange)PitchField.uiControlEditor;
             UI_FloatRange uiRange2 = (UI_FloatRange)PitchField.uiControlFlight;
-            uiRange1.minValue = uiRange2.minValue = pitchMin;
-            uiRange1.maxValue = uiRange2.maxValue = pitchMax;
+            PitchField.minValue = uiRange1.minValue = uiRange2.minValue = pitchMin;
+            PitchField.maxValue = uiRange1.maxValue = uiRange2.maxValue = pitchMax;
             uiRange1.stepIncrement = uiRange2.stepIncrement = pitchIncrement;
+            PitchField.incrementalSpeed = axisSpeed;
         }
 
         /// <summary>
