@@ -1,7 +1,10 @@
+Version 1.2 (2019-10-16)
+* Updated for KSP 1.8 compatibility.
+* Includes update to ModuleManager 4.1.0.
+
 Version 1.1 (2019-05-30)
 * Add axis-group binding for KSP 1.7.1 support.
 * Update to latest ModuleManager version (4.0.2).
-
 
 Version 1.0 (2018-12-20)
 * Initial release.
